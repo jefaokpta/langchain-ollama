@@ -13,7 +13,7 @@ class ChatController {
 
 
     @PostMapping
-    fun ollama(@RequestBody question: Question): String{
+    fun simpleQuestion(@RequestBody question: Question): String{
         val llm = OllamaChatModelBuilder()
             .baseUrl("http://localhost:11434")
             .modelName("llama3")
@@ -21,5 +21,8 @@ class ChatController {
             .build()
         return llm.generate(question.question)
     }
+
+    //todo: structured prompt question
+    //todo: RAG model question
 
 }
