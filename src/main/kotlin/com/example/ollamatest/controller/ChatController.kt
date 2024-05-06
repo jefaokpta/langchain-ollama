@@ -22,7 +22,7 @@ class ChatController {
         return llm.generate(question.question)
     }
 
-    //todo: structured prompt question
-    //todo: RAG model question
+    //todo: structured prompt question live1 1h 7min
+    //todo: RAG model question live 2 40min
 
 }
