@@ -27,7 +27,16 @@ class IAConfiguration {
 
     fun getIa() = ollamaChatModel
 
-    fun assistant(): Assistant {
+    private var assistant: Assistant? = null
+
+    fun getAssistant(): Assistant {
+        if (assistant == null) {
+            assistant = createAssistant()
+        }
+        return assistant!!
+    }
+
+    fun createAssistant(): Assistant {
         return AiServices.builder(Assistant::class.java)
             .chatLanguageModel(ollamaChatModel)
             .chatMemory(MessageWindowChatMemory.withMaxMessages(10))

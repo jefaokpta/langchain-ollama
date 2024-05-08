@@ -33,7 +33,7 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
 
     @PostMapping("/rag")
     fun ragQuestion(@RequestBody question: Question): String{
-        return iaConfiguration.assistant().answer(question.question)
+        return iaConfiguration.getAssistant().answer(question.question)
     }
 
 }
