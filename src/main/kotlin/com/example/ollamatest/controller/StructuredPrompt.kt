@@ -17,8 +17,8 @@ class StructuredPrompt {
     class FoodTemplate(val ingredients: List<String>)
 
     @StructuredPrompt(
-        "Voçê é a recepcionista de uma empresa e precisa direcionar um cliente para um departamento, ele te falou o seguinte: {{text}}.",
-        "Responda apenas com o nome do departamento: {{departments}}",
+        "Voçê é a recepcionista de uma empresa e precisa direcionar o cliente para um departamento com base no seguinte texto: {{text}}",
+        "Responda apenas umas destas opções: {{departments}}",
     )
     class DepartmentTemplate(val text: String, val departments: List<String>)
 }
