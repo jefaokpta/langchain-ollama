@@ -3,12 +3,14 @@ package com.example.ollamatest.controller
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
+import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.model.ollama.OllamaChatModel.OllamaChatModelBuilder
 import dev.langchain4j.rag.content.retriever.ContentRetriever
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever
 import dev.langchain4j.service.AiServices
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Duration
 
@@ -19,15 +21,23 @@ import java.time.Duration
 @Service
 class IAConfiguration {
 
-    private val ollamaChatModel = OllamaChatModelBuilder()
-        .baseUrl("http://localhost:11434")
-        .modelName("llama3")
-        .timeout(Duration.ofMinutes(5))
-        .build()
+    @Value("\${ollama.url}")
+    private lateinit var ollamaUrl: String
 
-    fun getIa() = ollamaChatModel
+    private var ollamaChatModel: OllamaChatModel? = null
 
     private var assistant: Assistant? = null
+
+    fun getIa(): OllamaChatModel {
+        if(ollamaChatModel == null){
+            ollamaChatModel = OllamaChatModelBuilder()
+                .baseUrl(ollamaUrl)
+                .modelName("llama3")
+                .timeout(Duration.ofMinutes(5))
+                .build()
+        }
+        return ollamaChatModel!!
+    }
 
     fun getAssistant(): Assistant {
         if (assistant == null) {

@@ -1,0 +1,7 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+ollama:
+  url: ${OLLAMA_URL:http://localhost:11434}
