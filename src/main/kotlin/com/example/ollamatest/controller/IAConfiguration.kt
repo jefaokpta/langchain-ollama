@@ -33,7 +33,8 @@ class IAConfiguration {
             ollamaChatModel = OllamaChatModelBuilder()
                 .baseUrl(ollamaUrl)
                 .modelName("llama3")
-                .timeout(Duration.ofMinutes(5))
+//                .temperature(0.1)
+                .timeout(Duration.ofMinutes(1))
                 .build()
         }
         return ollamaChatModel!!
@@ -48,7 +49,7 @@ class IAConfiguration {
 
     fun createAssistant(): Assistant {
         return AiServices.builder(Assistant::class.java)
-            .chatLanguageModel(ollamaChatModel)
+            .chatLanguageModel(getIa())
             .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
             .contentRetriever(createContentRetriever())
             .build()

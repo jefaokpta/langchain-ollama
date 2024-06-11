@@ -1,5 +1,6 @@
 package com.example.ollamatest.controller
 
+import com.example.ollamatest.controller.model.Department
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,8 +27,14 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
 
     @PostMapping("/classified")
     fun structuredPrompt(@RequestBody text: String): String{
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, listOf("Financeiro", "RH", "Comercial", "Marketing", "Suporte"))
-        val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
+        val deptos = listOf(
+            Department(2, "Financeiro"),
+            Department(1, "RH"),
+            Department(3, "Comercial"),
+            Department(4, "Marketing"),
+            Department(5, "Suporte"))
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map { it.department })
+            val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return iaConfiguration.getIa().generate(prompt.text())
     }
 
