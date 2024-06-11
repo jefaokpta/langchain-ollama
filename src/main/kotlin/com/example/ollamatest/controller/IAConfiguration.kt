@@ -26,6 +26,9 @@ class IAConfiguration(private val bookingTool: BookingTool) {
     @Value("\${ollama.url}")
     private lateinit var ollamaUrl: String
 
+    @Value("\${documents.path}")
+    private lateinit var documentsPath: String
+
     private var ollamaChatModel: OllamaChatModel? = null
 
     private var assistant: Assistant? = null
@@ -76,7 +79,7 @@ class IAConfiguration(private val bookingTool: BookingTool) {
 
     fun createContentRetriever(): ContentRetriever {
         val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
-        val documents = FileSystemDocumentLoader.loadDocuments("src/main/resources/docs")
+        val documents = FileSystemDocumentLoader.loadDocuments(documentsPath)
         println("Documents loaded: ${documents.size}")
         EmbeddingStoreIngestor.ingest(documents, inMemoryEmbeddingStore)
         return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)

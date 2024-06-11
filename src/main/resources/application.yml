@@ -5,3 +5,6 @@ spring:
 
 ollama:
   url: ${OLLAMA_URL:http://localhost:11434}
+
+documents:
+  path: ${DOCUMENTS_PATH:src/main/resources/docs}
