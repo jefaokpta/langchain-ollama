@@ -33,7 +33,7 @@ class IAConfiguration {
             ollamaChatModel = OllamaChatModelBuilder()
                 .baseUrl(ollamaUrl)
                 .modelName("llama3")
-//                .temperature(0.1)
+                .temperature(0.1)
                 .timeout(Duration.ofMinutes(1))
                 .build()
         }
