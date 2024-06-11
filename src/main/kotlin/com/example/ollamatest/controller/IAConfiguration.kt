@@ -76,9 +76,9 @@ class IAConfiguration(private val bookingTool: BookingTool) {
 
     fun createContentRetriever(): ContentRetriever {
         val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
-        val document = FileSystemDocumentLoader.loadDocument("src/main/resources/kathia.txt")
-        println("Document loaded: ${document.text()}")
-        EmbeddingStoreIngestor.ingest(document, inMemoryEmbeddingStore)
+        val documents = FileSystemDocumentLoader.loadDocuments("src/main/resources/docs")
+        println("Documents loaded: ${documents.size}")
+        EmbeddingStoreIngestor.ingest(documents, inMemoryEmbeddingStore)
         return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
     }
 
