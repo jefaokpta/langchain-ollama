@@ -43,4 +43,9 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
         return iaConfiguration.getAssistant().answer(question.question)
     }
 
+    @PostMapping("/support")
+    fun supportQuestion(@RequestBody question: Question): String{
+        return iaConfiguration.getAssistantSupport().chat(question.question)
+    }
+
 }

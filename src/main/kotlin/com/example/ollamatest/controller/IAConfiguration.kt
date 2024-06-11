@@ -1,5 +1,7 @@
 package com.example.ollamatest.controller
 
+import com.example.ollamatest.tools.AssistantSupport
+import com.example.ollamatest.tools.BookingTool
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
@@ -19,7 +21,7 @@ import java.time.Duration
  * Date: 08/05/2024
  */
 @Service
-class IAConfiguration {
+class IAConfiguration(private val bookingTool: BookingTool) {
 
     @Value("\${ollama.url}")
     private lateinit var ollamaUrl: String
@@ -27,13 +29,14 @@ class IAConfiguration {
     private var ollamaChatModel: OllamaChatModel? = null
 
     private var assistant: Assistant? = null
+    private var assistantSupport: AssistantSupport? = null
 
     fun getIa(): OllamaChatModel {
         if(ollamaChatModel == null){
             ollamaChatModel = OllamaChatModelBuilder()
                 .baseUrl(ollamaUrl)
                 .modelName("llama3")
-                .temperature(0.1)
+                .temperature(0.0)
                 .timeout(Duration.ofMinutes(1))
                 .build()
         }
@@ -47,6 +50,13 @@ class IAConfiguration {
         return assistant!!
     }
 
+    fun getAssistantSupport(): AssistantSupport {
+        if (assistantSupport == null) {
+            assistantSupport = createAssistantSupport()
+        }
+        return assistantSupport!!
+    }
+
     fun createAssistant(): Assistant {
         return AiServices.builder(Assistant::class.java)
             .chatLanguageModel(getIa())
@@ -55,9 +65,26 @@ class IAConfiguration {
             .build()
     }
 
+    fun createAssistantSupport(): AssistantSupport {
+        return AiServices.builder(AssistantSupport::class.java)
+            .chatLanguageModel(getIa())
+            .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
+            .tools(bookingTool)
+            .contentRetriever(createTermsOfUse())
+            .build()
+    }
+
     fun createContentRetriever(): ContentRetriever {
         val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
         val document = FileSystemDocumentLoader.loadDocument("src/main/resources/kathia.txt")
+        println("Document loaded: ${document.text()}")
+        EmbeddingStoreIngestor.ingest(document, inMemoryEmbeddingStore)
+        return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
+    }
+
+    fun createTermsOfUse(): ContentRetriever {
+        val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
+        val document = FileSystemDocumentLoader.loadDocument("src/main/resources/miles-of-smiles-terms-of-use.txt")
         println("Document loaded: ${document.text()}")
         EmbeddingStoreIngestor.ingest(document, inMemoryEmbeddingStore)
         return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
