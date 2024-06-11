@@ -33,7 +33,7 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
             Department(3, "Comercial"),
             Department(4, "Marketing"),
             Department(5, "Suporte"))
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map { it.department })
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map(Department::department))
             val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return iaConfiguration.getIa().generate(prompt.text())
     }
