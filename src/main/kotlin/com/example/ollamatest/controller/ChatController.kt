@@ -2,6 +2,7 @@ package com.example.ollamatest.controller
 
 import com.example.ollamatest.config.IAConfiguration
 import com.example.ollamatest.config.StructuredPrompt
+import com.example.ollamatest.model.Answer
 import com.example.ollamatest.model.Department
 import com.example.ollamatest.model.Question
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor
@@ -29,8 +30,8 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
     }
 
     @PostMapping("/assistant")
-    fun ragQuestion(@RequestBody question: Question): String{
-        return iaConfiguration.getAssistant().answer(question.question)
+    fun ragQuestion(@RequestBody question: Question): Answer {
+        return Answer(iaConfiguration.getAssistant().answer(question.question))
     }
 
     @PostMapping("/support")
