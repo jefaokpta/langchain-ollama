@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload de Docs para IA</title>
+</head>
+<body>
+
+    <h1>Upload de Docs para IA</h1>
+
+    <form method="POST" action="/submit" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td><label>Select a file to upload</label></td>
+                <td><input type="file" name="file" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    </form>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+    const error = params.get('error');
+
+    if(success === 'true') {
+        alert('Upload feito com sucesso! 👍');
+    }
+    if (error) {
+        alert('Arquivo invalido! 😢');
+    }
+</script>
+</body>
+</html>
