@@ -1,4 +1,4 @@
-package com.example.ollamatest.controller
+package com.example.ollamatest.config
 
 /**
  * @author Jefferson Alves Reis (jefaokpta) <jefaokpta@hotmail.com>

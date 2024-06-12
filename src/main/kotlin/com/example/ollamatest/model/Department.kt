@@ -1,4 +1,4 @@
-package com.example.ollamatest.controller.model
+package com.example.ollamatest.model
 
 /**
  * @author Jefferson Alves Reis (jefaokpta) < jefaokpta@hotmail.com >

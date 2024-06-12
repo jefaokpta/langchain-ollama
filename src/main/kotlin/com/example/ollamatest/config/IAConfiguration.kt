@@ -1,4 +1,4 @@
-package com.example.ollamatest.controller
+package com.example.ollamatest.config
 
 import com.example.ollamatest.tools.AssistantSupport
 import com.example.ollamatest.tools.BookingTool
