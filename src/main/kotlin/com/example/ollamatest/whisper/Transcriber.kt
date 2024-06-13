@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
  * Date: 13/06/2024
  */
 @Service
-class Transcriptor {
+class Transcriber {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
@@ -20,6 +20,7 @@ class Transcriptor {
         val processBuilder = ProcessBuilder()
         val command =
             "~/Workspace/Python/pythonProject/.venv/bin/whisper $transcriptionsPath/$audio " +
+                    "--model=large " +
                     "--fp16=False " +
                     "--language=pt " +
                     "--beam_size=5 " +

@@ -14,7 +14,7 @@ import java.io.InputStreamReader
  */
 @Disabled
 @SpringBootTest
-class TranscriptionServiceTest(@Autowired private val transcriptor: Transcriptor){
+class TranscribeServiceTest(@Autowired private val transcriptor: Transcriptor){
 
     @Test
     fun test(){
