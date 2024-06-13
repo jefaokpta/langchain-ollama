@@ -12,7 +12,6 @@ function sendMessage(message) {
                 const messageElement = document.createElement('p');
                 // messageElement.textContent = data.answer;
                 document.getElementById('chat-messages').appendChild(messageElement);
-                messageElement.scrollIntoView({ behavior: 'smooth'});
                 typeWriteAnswer(messageElement, data.answer);
             });
         }
@@ -26,6 +25,7 @@ function typeWriteAnswer(messageElement, message) {
     writer(messageElement, message);
 }
 function writer(messageElement, message) {
+    messageElement.scrollIntoView({ behavior: 'smooth'});
     if (i >= message.length) {
         return;
     }
