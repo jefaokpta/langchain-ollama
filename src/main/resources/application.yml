@@ -8,3 +8,5 @@ ollama:
 
 documents:
   path: ${DOCUMENTS_PATH:src/main/resources/documents}
+transcriptions:
+  path: ${TRANSCRIPTIONS_PATH:src/main/resources/transcriptions}
