@@ -1,4 +1,4 @@
-package com.example.ollamatest.controller
+package com.example.ollamatest.view
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping

@@ -1,4 +1,4 @@
-package com.example.ollamatest.controller
+package com.example.ollamatest.view
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
