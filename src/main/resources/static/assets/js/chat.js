@@ -1,6 +1,6 @@
 
 function sendMessage(message) {
-    fetch('/veia/chat/assistant', {
+    fetch('/openai/chat/assistant', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
