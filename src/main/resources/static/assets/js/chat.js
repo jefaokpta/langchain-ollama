@@ -19,11 +19,13 @@ function sendMessage(message) {
         console.error('Deu ruim:', error);
     })
 }
+
 let i= 0;
 function typeWriteAnswer(messageElement, message) {
     i=0;
     writer(messageElement, message);
 }
+
 function writer(messageElement, message) {
     messageElement.scrollIntoView({ behavior: 'smooth'});
     if (i >= message.length) {
