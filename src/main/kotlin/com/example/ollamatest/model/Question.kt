@@ -5,6 +5,7 @@ package com.example.ollamatest.model
  * Date: 05/05/24
  */
 class Question(
-    val question: String
+    val question: String,
+    val session: String = "default"
 ) {
 }

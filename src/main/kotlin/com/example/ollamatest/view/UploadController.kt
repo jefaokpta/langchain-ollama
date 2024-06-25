@@ -1,5 +1,6 @@
 package com.example.ollamatest.view
 
+import com.example.ollamatest.cache.AssistantCache
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Controller
@@ -18,7 +19,7 @@ import java.io.File
  */
 @Controller
 @RequestMapping("/")
-class UploadController {
+class UploadController(private val assistantCache: AssistantCache) {
 
     private val log = LoggerFactory.getLogger(this::class.java)
     @Value("\${documents.path}")
@@ -36,6 +37,7 @@ class UploadController {
             return RedirectView("/upload?error=invalid-file")
         }
         file.transferTo(File("${System.getProperty("user.dir")}/$documentsPath/${file.originalFilename}"))
+        assistantCache.clear()
         return RedirectView("/upload?success=true")
     }
 

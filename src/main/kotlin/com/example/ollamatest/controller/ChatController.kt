@@ -31,7 +31,7 @@ class ChatController(private val openAiService: OpenAiService) {
 
     @PostMapping("/chat")
     fun ragQuestion(@RequestBody question: Question): Answer {
-        return Answer(openAiService.assistant().answer(question.question))
+        return Answer(openAiService.assistant(question).answer(question.question))
     }
 
 

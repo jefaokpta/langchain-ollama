@@ -1,6 +1,7 @@
 package com.example.ollamatest.openai
 
-import com.example.ollamatest.config.Assistant
+import com.example.ollamatest.cache.AssistantCache
+import com.example.ollamatest.model.Question
 import com.example.ollamatest.tools.AssistantSupport
 import com.example.ollamatest.tools.BookingTool
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
@@ -22,18 +23,18 @@ import java.time.Duration
  * Date: 24/06/2024
  */
 @Service
-class OpenAiService(private val chatLanguageModel: ChatLanguageModel, private val bookingTool: BookingTool) {
-
-    @Value("\${documents.path}")
-    private lateinit var documentsPath: String
+class OpenAiService(
+    private val chatLanguageModel: ChatLanguageModel,
+    private val bookingTool: BookingTool,
+    private val assistantCache: AssistantCache
+) {
 
     @Value("\${langchain4j.open-ai.chat-model.api-key}")
     private lateinit var apiKey: String
 
-    private val assistant: Assistant by lazy { createAssistant() }
     private val assistantSupport: AssistantSupport by lazy { createAssistantSupport() }
 
-    fun assistant() = assistant
+    fun assistant(question: Question) = assistantCache.getAssistant(question.session)
     fun bookingAssistantSupport() = assistantSupport
 
     fun getDepartmentClassifier() = OpenAiChatModelBuilder()
@@ -43,20 +44,7 @@ class OpenAiService(private val chatLanguageModel: ChatLanguageModel, private va
         .timeout(Duration.ofSeconds(30))
         .build()
 
-    private fun createAssistant(): Assistant {
-        return AiServices.builder(Assistant::class.java)
-            .chatLanguageModel(chatLanguageModel)
-            .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
-            .contentRetriever(createContentRetriever())
-            .build()
-    }
-    private fun createContentRetriever(): ContentRetriever {
-        val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
-        val documents = FileSystemDocumentLoader.loadDocuments(documentsPath)
-        println("Documents loaded: ${documents.size}")
-        EmbeddingStoreIngestor.ingest(documents, inMemoryEmbeddingStore)
-        return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
-    }
+
 
     private fun createAssistantSupport(): AssistantSupport {
         return AiServices.builder(AssistantSupport::class.java)
