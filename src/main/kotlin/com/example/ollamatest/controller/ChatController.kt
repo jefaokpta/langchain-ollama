@@ -1,10 +1,10 @@
 package com.example.ollamatest.controller
 
-import com.example.ollamatest.config.IAConfiguration
 import com.example.ollamatest.config.StructuredPrompt
 import com.example.ollamatest.model.Answer
 import com.example.ollamatest.model.Department
 import com.example.ollamatest.model.Question
+import com.example.ollamatest.openai.OpenAiService
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/veia/chat")
-class ChatController(private val iaConfiguration: IAConfiguration) {
+class ChatController(private val openAiService: OpenAiService) {
 
     @PostMapping("/department")
     fun structuredPrompt(@RequestBody text: String): String{
@@ -26,17 +26,17 @@ class ChatController(private val iaConfiguration: IAConfiguration) {
         )
         val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map(Department::department))
             val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
-        return iaConfiguration.getIa().generate(prompt.text())
+        return openAiService.getDepartmentClassifier().generate(prompt.text())
     }
 
     @PostMapping("/assistant")
     fun ragQuestion(@RequestBody question: Question): Answer {
-        return Answer(iaConfiguration.getAssistant().answer(question.question))
+        return Answer(openAiService.assistant().answer(question.question))
     }
 
-    @PostMapping("/support")
-    fun supportQuestion(@RequestBody question: Question): String{
-        return iaConfiguration.getAssistantSupport().chat(question.question)
-    }
+//    @PostMapping("/support")
+//    fun supportQuestion(@RequestBody question: Question): String{
+//        return iaConfiguration.getAssistantSupport().chat(question.question)
+//    }
 
 }

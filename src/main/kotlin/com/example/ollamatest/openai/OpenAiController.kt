@@ -37,5 +37,10 @@ class OpenAiController(private val openAiService: OpenAiService) {
         return Answer(openAiService.assistant().answer(question.question))
     }
 
+    @PostMapping("/support")
+    fun supportQuestion(@RequestBody question: Question): String{
+        return openAiService.bookingAssistantSupport().chat(question.question)
+    }
+
 
 }

@@ -1,8 +1,8 @@
 package com.example.ollamatest.tools
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.*
 
 /**
  * @author Jefferson Alves Reis (jefaokpta) < jefaokpta@hotmail.com >
@@ -17,6 +17,8 @@ class BookingService {
     private val bookingNumber = "123456"
     private val daysToStart = 1
     private val daysToEnd = 3
+
+    private val log = LoggerFactory.getLogger(BookingService::class.java)
 
     fun getBookingDetails(bookingNumber: String, customerName: String, customerSurname: String): Booking {
         ensureExists(bookingNumber, customerName, customerSurname)
@@ -35,10 +37,8 @@ class BookingService {
     }
 
     private fun ensureExists(bookingNumber: String, customerName: String, customerSurname: String) {
-        // Check mocking
-        if (!(bookingNumber == this.bookingNumber && customerName.lowercase(Locale.getDefault()) == firstName && customerSurname.lowercase(
-                Locale.getDefault()
-            ) == surname)
+        log.info("Checking booking $bookingNumber for $customerName $customerSurname")
+        if (!(bookingNumber == this.bookingNumber && customerName.lowercase() == firstName.lowercase() && customerSurname.lowercase() == surname.lowercase())
         ) {
             throw BookingNotFoundException(bookingNumber)
         }

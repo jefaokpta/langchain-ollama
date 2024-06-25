@@ -1,6 +1,8 @@
 package com.example.ollamatest.openai
 
 import com.example.ollamatest.config.Assistant
+import com.example.ollamatest.tools.AssistantSupport
+import com.example.ollamatest.tools.BookingTool
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
@@ -20,7 +22,7 @@ import java.time.Duration
  * Date: 24/06/2024
  */
 @Service
-class OpenAiService(private val chatLanguageModel: ChatLanguageModel) {
+class OpenAiService(private val chatLanguageModel: ChatLanguageModel, private val bookingTool: BookingTool) {
 
     @Value("\${documents.path}")
     private lateinit var documentsPath: String
@@ -29,8 +31,10 @@ class OpenAiService(private val chatLanguageModel: ChatLanguageModel) {
     private lateinit var apiKey: String
 
     private val assistant: Assistant by lazy { createAssistant() }
+    private val assistantSupport: AssistantSupport by lazy { createAssistantSupport() }
 
     fun assistant() = assistant
+    fun bookingAssistantSupport() = assistantSupport
 
     fun getDepartmentClassifier() = OpenAiChatModelBuilder()
         .apiKey(apiKey)
@@ -51,6 +55,23 @@ class OpenAiService(private val chatLanguageModel: ChatLanguageModel) {
         val documents = FileSystemDocumentLoader.loadDocuments(documentsPath)
         println("Documents loaded: ${documents.size}")
         EmbeddingStoreIngestor.ingest(documents, inMemoryEmbeddingStore)
+        return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
+    }
+
+    private fun createAssistantSupport(): AssistantSupport {
+        return AiServices.builder(AssistantSupport::class.java)
+            .chatLanguageModel(chatLanguageModel)
+            .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
+            .tools(bookingTool)
+            .contentRetriever(createTermsOfUse())
+            .build()
+    }
+
+    private fun createTermsOfUse(): ContentRetriever {
+        val inMemoryEmbeddingStore: InMemoryEmbeddingStore<TextSegment> = InMemoryEmbeddingStore<TextSegment>()
+        val document = FileSystemDocumentLoader.loadDocument("src/main/resources/miles-of-smiles-terms-of-use.txt")
+        println("Document loaded: ${document.text()}")
+        EmbeddingStoreIngestor.ingest(document, inMemoryEmbeddingStore)
         return EmbeddingStoreContentRetriever.from(inMemoryEmbeddingStore)
     }
 }
