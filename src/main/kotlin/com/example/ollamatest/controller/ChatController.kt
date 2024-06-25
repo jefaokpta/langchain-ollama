@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/veia/chat")
+@RequestMapping("/veia")
 class ChatController(private val openAiService: OpenAiService) {
 
     @PostMapping("/department")
@@ -29,14 +29,10 @@ class ChatController(private val openAiService: OpenAiService) {
         return openAiService.getDepartmentClassifier().generate(prompt.text())
     }
 
-    @PostMapping("/assistant")
+    @PostMapping("/chat")
     fun ragQuestion(@RequestBody question: Question): Answer {
         return Answer(openAiService.assistant().answer(question.question))
     }
 
-//    @PostMapping("/support")
-//    fun supportQuestion(@RequestBody question: Question): String{
-//        return iaConfiguration.getAssistantSupport().chat(question.question)
-//    }
 
 }
