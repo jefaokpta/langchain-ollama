@@ -23,6 +23,8 @@ class ChatController(private val openAiService: OpenAiService) {
             Department(3, "Comercial"),
             Department(4, "Marketing"),
             Department(5, "Suporte")
+//            Department(1, "Já sou cliente"),
+//            Department(1, "Não sou cliente"),
         )
         val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map(Department::department))
             val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
