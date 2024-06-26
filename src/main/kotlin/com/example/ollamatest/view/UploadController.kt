@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.servlet.ModelAndView
 import java.io.File
 
 
@@ -31,14 +30,14 @@ class UploadController(private val assistantCache: AssistantCache) {
     }
 
     @PostMapping("/submit")
-    fun submit(@RequestParam("file") file: MultipartFile): Any {
+    fun submit(@RequestParam("file") file: MultipartFile): String {
         log.info("Submitado: ${file.originalFilename}")
         if (!file.originalFilename!!.endsWith(".txt")) {
-            return ModelAndView("redirect:/upload?error=invalid-file")
+            return "redirect:upload?error=invalid-file"
         }
         file.transferTo(File("${System.getProperty("user.dir")}/$documentsPath/${file.originalFilename}"))
         assistantCache.clear()
-        return ModelAndView("redirect:/upload?success=true")
+        return "redirect:upload?success=true"
     }
 
 
