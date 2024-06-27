@@ -16,3 +16,4 @@ langchain4j:
     chat-model:
       api-key: ${OPENAI_API_KEY}
       model-name: ${OPENAI_MODEL_NAME:gpt-4-turbo}
+      temperature: ${OPENAI_TEMPERATURE:1.0}
