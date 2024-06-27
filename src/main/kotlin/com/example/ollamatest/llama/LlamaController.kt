@@ -21,17 +21,17 @@ class LlamaController(private val llamaService: LlamaService) {
     @PostMapping("/department")
     fun structuredPrompt(@RequestBody text: String): String{
         val deptos = listOf(
-//            Department(2, "Financeiro"),
-//            Department(1, "RH"),
-//            Department(3, "Comercial"),
-//            Department(4, "Marketing"),
-//            Department(5, "Suporte")
-            Department(1, "Já sou cliente"),
-            Department(2, "Não sou cliente"),
+            Department(2, "Financeiro"),
+            Department(1, "RH"),
+            Department(3, "Comercial"),
+            Department(4, "Marketing"),
+            Department(5, "Suporte")
+//            Department(1, "Já sou cliente"),
+//            Department(2, "Não sou cliente"),
         )
         val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map(Department::department))
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
-        return llamaService.getOllamaModel().generate(prompt.text())
+        return llamaService.getClassifierModel().generate(prompt.text())
     }
 
     @PostMapping("/chat")
