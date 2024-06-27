@@ -39,8 +39,8 @@ class LlamaService(private val bookingTool: BookingTool) {
     fun getClassifierModel(): OllamaChatModel {
         return OllamaChatModelBuilder()
             .baseUrl(ollamaUrl)
-            .modelName("gemma2")
-//                .modelName("llama3")
+//            .modelName("gemma2")
+                .modelName("llama3")
             .temperature(0.0)
             .timeout(Duration.ofMinutes(1))
             .build()
@@ -49,8 +49,8 @@ class LlamaService(private val bookingTool: BookingTool) {
     private fun getConversationalModel(): OllamaChatModel {
         return OllamaChatModelBuilder()
                 .baseUrl(ollamaUrl)
-                .modelName("gemma2")
-//                .modelName("llama3")
+//                .modelName("gemma2")
+                .modelName("llama3")
                 .temperature(1.0)
                 .timeout(Duration.ofMinutes(1))
                 .build()
