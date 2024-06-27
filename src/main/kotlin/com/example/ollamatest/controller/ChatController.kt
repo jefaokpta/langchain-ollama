@@ -6,6 +6,7 @@ import com.example.ollamatest.model.Department
 import com.example.ollamatest.model.Question
 import com.example.ollamatest.openai.OpenAiService
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -31,6 +32,7 @@ class ChatController(private val openAiService: OpenAiService) {
         return openAiService.getDepartmentClassifier().generate(prompt.text())
     }
 
+    @CrossOrigin(originPatterns = ["https://*.vipsolutions.com.br"])
     @PostMapping("/chat")
     fun ragQuestion(@RequestBody question: Question): Answer {
         return Answer(openAiService.assistant(question).answer(question.question))
