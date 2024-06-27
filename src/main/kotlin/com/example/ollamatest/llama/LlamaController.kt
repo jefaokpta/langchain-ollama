@@ -31,7 +31,7 @@ class LlamaController(private val llamaService: LlamaService) {
         )
         val deptoTemplate = StructuredPrompt.DepartmentTemplate(text, deptos.map(Department::department))
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
-        return llamaService.getOllamaModel().generate(prompt.text())
+        return llamaService.getClassifierModel().generate(prompt.text())
     }
 
     @PostMapping("/chat")
