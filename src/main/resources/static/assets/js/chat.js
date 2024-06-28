@@ -1,6 +1,6 @@
 
 function sendMessage(message) {
-    fetch('/veia/chat', {
+    fetch('/llama/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
