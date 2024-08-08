@@ -32,14 +32,12 @@ class LlamaService(private val bookingTool: BookingTool) {
 
     private val assistant: Assistant by lazy { createAssistant() }
 
-    fun assistant(): Assistant {
-        return assistant
-    }
+    fun assistant() = assistant
 
     fun getClassifierModel(): OllamaChatModel {
         return OllamaChatModelBuilder()
             .baseUrl(ollamaUrl)
-//            .modelName("llama3")
+//            .modelName("llama3.1")
             .modelName("mistral")
             .temperature(0.0)
             .timeout(Duration.ofMinutes(1))
@@ -49,7 +47,7 @@ class LlamaService(private val bookingTool: BookingTool) {
     private fun getConversationalModel(): OllamaChatModel {
         return OllamaChatModelBuilder()
                 .baseUrl(ollamaUrl)
-//                .modelName("llama3")
+//                .modelName("llama3.1")
                 .modelName("mistral")
                 .temperature(1.0)
                 .timeout(Duration.ofMinutes(1))
