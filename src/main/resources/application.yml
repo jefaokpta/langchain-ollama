@@ -5,11 +5,12 @@ spring:
 
 ollama:
   url: ${OLLAMA_URL:http://localhost:11434}
-
+whisper:
+  url: ${WHISPER_API_URL:http://localhost:3000}
 documents:
   path: ${DOCUMENTS_PATH:src/main/resources/documents}
 transcriptions:
-  path: ${TRANSCRIPTIONS_PATH:src/main/resources/transcriptions}
+  path: ${TRANSCRIPTIONS_PATH:/tmp}
 
 langchain4j:
   open-ai:
