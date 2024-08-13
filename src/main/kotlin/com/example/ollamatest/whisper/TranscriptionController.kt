@@ -1,6 +1,5 @@
 package com.example.ollamatest.whisper
 
-import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,14 +14,16 @@ import java.nio.file.Paths
  */
 @RestController
 @RequestMapping("/veia/transcription")
-class TranscriptionController(private val transcriptionService: TranscriptionService) {
+class TranscriptionController(
+    private val transcriptionService: TranscriptionService,
+) {
 
     @Value("\${transcriptions.path}")
     private lateinit var audioPath: String
 
     @PostMapping
-    fun uploadAudio(@RequestParam("audio") audio: MultipartFile): JsonNode {
+    fun uploadAudio(@RequestParam("audio") audio: MultipartFile, @RequestParam jsonDepartments: String): String {
         audio.transferTo(Paths.get(audioPath, audio.originalFilename))
-        return transcriptionService.transcribeAudio(audio.originalFilename!!)
+        return transcriptionService.transcribeAudio(audio.originalFilename!!, jsonDepartments)
     }
 }

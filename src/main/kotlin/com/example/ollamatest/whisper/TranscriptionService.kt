@@ -1,6 +1,8 @@
 package com.example.ollamatest.whisper
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.example.ollamatest.llama.LlamaService
+import com.example.ollamatest.model.DepartmentQuestion
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 
 /**
@@ -8,9 +10,14 @@ import org.springframework.stereotype.Service
  * Date: 8/9/24
  */
 @Service
-class TranscriptionService(private val transcriptionClient: TranscriptionClient) {
+class TranscriptionService(
+    private val transcriptionClient: TranscriptionClient,
+    private val llamaService: LlamaService,
+    private val jacksonObjectMapper: ObjectMapper
+) {
 
-    fun transcribeAudio(audioName: String): JsonNode {
-        return transcriptionClient.transcribe(audioName)
+    fun transcribeAudio(audioName: String, jsonDepartments: String): String {
+        val jsonTranscription =  transcriptionClient.transcribe(audioName)
+        return llamaService.classifierDepartment(DepartmentQuestion(jsonTranscription["text"].asText(), jacksonObjectMapper.readValue(jsonDepartments, Array<String>::class.java).toList()))
     }
 }

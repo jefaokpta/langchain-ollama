@@ -2,7 +2,6 @@ package com.example.ollamatest.openai
 
 import com.example.ollamatest.config.StructuredPrompt
 import com.example.ollamatest.model.Answer
-import com.example.ollamatest.model.Department
 import com.example.ollamatest.model.DepartmentQuestion
 import com.example.ollamatest.model.Question
 import dev.langchain4j.model.input.structured.StructuredPromptProcessor
@@ -21,7 +20,7 @@ class OpenAiController(private val openAiService: OpenAiService) {
 
     @PostMapping("/department")
     fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): String{
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments.map(Department::name))
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments)
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return openAiService.getDepartmentClassifier().generate(prompt.text())
     }

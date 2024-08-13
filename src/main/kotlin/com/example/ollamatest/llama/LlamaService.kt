@@ -1,10 +1,13 @@
 package com.example.ollamatest.llama
 
 import com.example.ollamatest.config.Assistant
+import com.example.ollamatest.config.StructuredPrompt
+import com.example.ollamatest.model.DepartmentQuestion
 import com.example.ollamatest.tools.BookingTool
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
+import dev.langchain4j.model.input.structured.StructuredPromptProcessor
 import dev.langchain4j.model.ollama.OllamaChatModel
 import dev.langchain4j.model.ollama.OllamaChatModel.OllamaChatModelBuilder
 import dev.langchain4j.rag.content.retriever.ContentRetriever
@@ -34,7 +37,13 @@ class LlamaService(private val bookingTool: BookingTool) {
 
     fun assistant() = assistant
 
-    fun getClassifierModel(): OllamaChatModel {
+    fun classifierDepartment(departmentQuestion: DepartmentQuestion): String {
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments)
+        val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
+        return classifierModel().generate(prompt.text())
+    }
+
+    private fun classifierModel(): OllamaChatModel {
         return OllamaChatModelBuilder()
             .baseUrl(ollamaUrl)
 //            .modelName("llama3.1")
