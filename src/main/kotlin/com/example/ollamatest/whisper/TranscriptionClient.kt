@@ -21,7 +21,7 @@ class TranscriptionClient {
     @Value("\${whisper.url}")
     private lateinit var WHISPER_URL: String
 
-    private val HTTP_REQUEST_TIMEOUT = 60L
+    private val HTTP_REQUEST_TIMEOUT = 180L
     private val HTTP_CONNECTION_TIMEOUT = 3L
 
     private val log = LoggerFactory.getLogger(this::class.java)
