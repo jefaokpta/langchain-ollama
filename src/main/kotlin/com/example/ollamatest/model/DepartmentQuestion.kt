@@ -6,6 +6,6 @@ package com.example.ollamatest.model
  */
 class DepartmentQuestion(
     val text: String,
-    val departments: List<String>
+    val departments: List<Department>
 ) {
 }

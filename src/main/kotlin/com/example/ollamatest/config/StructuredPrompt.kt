@@ -11,9 +11,8 @@ class StructuredPrompt(prompt: String) {
 
     @StructuredPrompt(
         "Voçê é a atendente de uma empresa de serviços online e deve adivinhar qual o departamento que melhor atenda a necessidade do cliente: {{text}}",
-//        "Voçê está atendendo um cliente e deve adivinhar o departamento que o cliente deseja falar: {{text}}",
-        "Responda apenas 1 dos departamentos: {{departments}}",
-        "Caso não saiba o que responder, responda apenas a palavra: Indefinido"
+        "Responda apenas o número correspondente do departamento: {{departments}}",
+        "Caso não saiba o que responder, responda apenas o múmero: 0"
     )
     class DepartmentTemplate(val text: String, val departments: List<String>)
 }

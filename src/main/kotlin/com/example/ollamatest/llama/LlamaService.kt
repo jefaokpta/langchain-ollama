@@ -38,7 +38,7 @@ class LlamaService(private val bookingTool: BookingTool) {
     fun assistant() = assistant
 
     fun classifierDepartment(departmentQuestion: DepartmentQuestion): String {
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments)
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return classifierModel().generate(prompt.text())
     }
