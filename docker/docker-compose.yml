@@ -1,0 +1,43 @@
+services:
+  proxy:
+    image: nginx:1.27
+    restart: always
+    volumes:
+        - ./conf-proxy:/etc/nginx/conf.d/
+        - ./certs:/etc/nginx/certs/
+    ports:
+        - 80:80
+        - 443:443
+    networks:
+        - proxy
+
+  api:
+    build: ./api
+    networks:
+      - proxy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./documents:/documents
+      - /opt/whisper-api/audios:/audios
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - WHISPER_API_URL=http://host.docker.internal:3000
+      - DOCUMENTS_PATH=./documents
+      - OPENAI_API_KEY=OPENAI_API_KEY
+      - TRANSCRIPTIONS_PATH=/audios
+
+  ollama:
+    image: ollama/ollama:0.3.4-rocm
+    networks:
+      - proxy
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama:/root/.ollama
+    devices:
+      - /dev/kfd
+      - /dev/dri
+
+networks:
+  proxy:
