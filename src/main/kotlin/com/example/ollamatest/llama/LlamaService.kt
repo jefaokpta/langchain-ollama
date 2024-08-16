@@ -49,7 +49,7 @@ class LlamaService(private val bookingTool: BookingTool) {
 //            .modelName("llama3.1")
             .modelName("phi3:medium")
 //            .modelName("mistral")
-            .temperature(0.0)
+            .temperature(0.1)
             .timeout(Duration.ofMinutes(1))
             .build()
     }
