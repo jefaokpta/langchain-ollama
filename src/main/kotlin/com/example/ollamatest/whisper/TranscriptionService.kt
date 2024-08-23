@@ -1,6 +1,7 @@
 package com.example.ollamatest.whisper
 
 import com.example.ollamatest.llama.LlamaService
+import com.example.ollamatest.model.Answer
 import com.example.ollamatest.model.Department
 import com.example.ollamatest.model.DepartmentQuestion
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -17,7 +18,7 @@ class TranscriptionService(
     private val jacksonObjectMapper: ObjectMapper
 ) {
 
-    fun transcribeAudio(audioName: String, jsonDepartments: String): String {
+    fun transcribeAudio(audioName: String, jsonDepartments: String): Answer {
         val jsonTranscription =  transcriptionClient.transcribe(audioName)
         return llamaService.classifierDepartment(DepartmentQuestion(jsonTranscription["text"].asText(), jacksonObjectMapper.readValue(jsonDepartments, Array<Department>::class.java).toList()))
     }

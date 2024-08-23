@@ -14,10 +14,16 @@ class ChatController(private val llamaService: LlamaService) {
     private val log = LoggerFactory.getLogger(this::class.java)
 
     @PostMapping("/department")
-    fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): String{
-        return llamaService.classifierDepartment(departmentQuestion).apply {
-            log.info("🔥 Pergunta: ${departmentQuestion.text} - Resposta: $this")
+    fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): Answer {
+        if (departmentQuestion.departments.isEmpty()) {
+            log.warn("\uD83D\uDEAB Nenhuma opção de departamento para classificar")
+            return Answer("0")
         }
+        if (departmentQuestion.departments.size == 1) {
+            log.warn("\uD83D\uDEAB Nenhuma pergunta para classificar")
+            return Answer(departmentQuestion.departments.first().id.toString())
+        }
+        return llamaService.classifierDepartment(departmentQuestion)
     }
 
     @CrossOrigin(originPatterns = ["https://*.vipsolutions.com.br"])

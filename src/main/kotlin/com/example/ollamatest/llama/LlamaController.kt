@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class LlamaController(private val llamaService: LlamaService) {
 
     @PostMapping("/department")
-    fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): String{
+    fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): Answer {
         return llamaService.classifierDepartment(departmentQuestion)
     }
 

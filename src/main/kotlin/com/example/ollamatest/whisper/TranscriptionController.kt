@@ -1,5 +1,6 @@
 package com.example.ollamatest.whisper
 
+import com.example.ollamatest.model.Answer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,7 +23,7 @@ class TranscriptionController(
     private lateinit var audioPath: String
 
     @PostMapping
-    fun uploadAudio(@RequestParam("audio") audio: MultipartFile, @RequestParam jsonDepartments: String): String {
+    fun uploadAudio(@RequestParam("audio") audio: MultipartFile, @RequestParam jsonDepartments: String): Answer {
         audio.transferTo(Paths.get(audioPath, audio.originalFilename))
         return transcriptionService.transcribeAudio(audio.originalFilename!!, jsonDepartments)
     }

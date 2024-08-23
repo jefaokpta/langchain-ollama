@@ -2,7 +2,9 @@ package com.example.ollamatest.llama
 
 import com.example.ollamatest.config.Assistant
 import com.example.ollamatest.config.StructuredPrompt
+import com.example.ollamatest.model.Answer
 import com.example.ollamatest.model.DepartmentQuestion
+import com.example.ollamatest.model.OptionRank
 import com.example.ollamatest.tools.BookingTool
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
@@ -15,6 +17,7 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever
 import dev.langchain4j.service.AiServices
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -32,15 +35,44 @@ class LlamaService(private val bookingTool: BookingTool) {
     @Value("\${documents.path}")
     private lateinit var documentsPath: String
 
+    private val log = LoggerFactory.getLogger(this::class.java)
+
 
     private val assistant: Assistant by lazy { createAssistant() }
 
     fun assistant() = assistant
 
-    fun classifierDepartment(departmentQuestion: DepartmentQuestion): String {
+    fun classifierDepartment(departmentQuestion: DepartmentQuestion): Answer {
         val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
-        return classifierModel().generate(prompt.text())
+        return Answer(seekRigthAnswer(
+            classifierModel().generate(prompt.text())
+                .apply { log.info("🔥 Pergunta: ${departmentQuestion.text} - Resposta: $this") },
+            departmentQuestion
+        ))
+    }
+
+    private fun seekRigthAnswer(fullAnswer: String, departmentQuestion: DepartmentQuestion): String {
+        val optionsRanked = departmentQuestion.departments.map { OptionRank(it.id, countOptions(fullAnswer, it.id.toString())) }
+            .sortedByDescending { it.rank }
+        log.info("Options ranked: $optionsRanked")
+        if (optionsRanked[0].rank != optionsRanked[1].rank) {
+            return optionsRanked[0].option.toString()
+        }
+        return "0"
+    }
+    private fun countOptions(text: String, option: String): Int {
+        var count = 0
+        var index = 0
+        while (index < text.length) {
+            if (text.startsWith(option, index)) {
+                count++
+                index += option.length
+            } else {
+                index++
+            }
+        }
+        return count
     }
 
     private fun classifierModel(): OllamaChatModel {
