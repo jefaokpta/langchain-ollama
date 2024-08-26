@@ -4,8 +4,9 @@ package com.example.ollamatest.model
  * @author Jefferson Alves Reis (jefaokpta) < jefaokpta@hotmail.com >
  * Date: 8/8/24
  */
-class DepartmentQuestion(
-    val text: String,
-    val departments: List<Department>
+data class DepartmentQuestion(
+    val text: String? = null,
+    val departments: List<Department>,
+    val audio: String? = null
 ) {
 }

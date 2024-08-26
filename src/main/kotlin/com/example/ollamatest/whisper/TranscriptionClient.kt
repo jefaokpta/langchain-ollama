@@ -29,7 +29,7 @@ class TranscriptionClient {
     fun transcribe(audioName: String): JsonNode {
         val jsonNode = jacksonObjectMapper().createObjectNode()
         jsonNode.put("audio", audioName)
-        val request = HttpRequest.newBuilder(URI(WHISPER_URL))
+        val request = HttpRequest.newBuilder(URI("$WHISPER_URL/transcribe"))
             .POST(HttpRequest.BodyPublishers.ofString(jsonNode.toString()))
             .header("Content-Type", "application/json")
             .timeout(Duration.ofSeconds(HTTP_REQUEST_TIMEOUT))

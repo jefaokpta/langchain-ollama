@@ -20,7 +20,7 @@ class OpenAiController(private val openAiService: OpenAiService) {
 
     @PostMapping("/department")
     fun structuredPrompt(@RequestBody departmentQuestion: DepartmentQuestion): String{
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text!!, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return openAiService.getDepartmentClassifier().generate(prompt.text())
     }

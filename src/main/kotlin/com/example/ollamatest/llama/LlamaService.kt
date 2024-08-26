@@ -5,7 +5,7 @@ import com.example.ollamatest.config.StructuredPrompt
 import com.example.ollamatest.model.Answer
 import com.example.ollamatest.model.DepartmentQuestion
 import com.example.ollamatest.model.OptionRank
-import com.example.ollamatest.tools.BookingTool
+import com.example.ollamatest.whisper.TranscriptionClient
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader
 import dev.langchain4j.data.segment.TextSegment
 import dev.langchain4j.memory.chat.MessageWindowChatMemory
@@ -27,7 +27,7 @@ import java.time.Duration
  * Date: 08/05/2024
  */
 @Service
-class LlamaService(private val bookingTool: BookingTool) {
+class LlamaService(private val transcriptionClient: TranscriptionClient) {
 
     @Value("\${ollama.url}")
     private lateinit var ollamaUrl: String
@@ -43,13 +43,17 @@ class LlamaService(private val bookingTool: BookingTool) {
     fun assistant() = assistant
 
     fun classifierDepartment(departmentQuestion: DepartmentQuestion): Answer {
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text!!, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return Answer(seekRigthAnswer(
             classifierModel().generate(prompt.text())
                 .apply { log.info("🔥 Pergunta: ${departmentQuestion.text} - Resposta: $this") },
             departmentQuestion
         ))
+    }
+
+    fun classifierDepartmentAudio(departmentQuestion: DepartmentQuestion): Answer {
+        return classifierDepartment(departmentQuestion.copy(text = transcriptionClient.transcribe(departmentQuestion.audio!!)["text"].asText()))
     }
 
     private fun seekRigthAnswer(fullAnswer: String, departmentQuestion: DepartmentQuestion): String {
