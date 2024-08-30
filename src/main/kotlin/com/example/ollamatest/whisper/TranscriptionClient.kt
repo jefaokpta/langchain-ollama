@@ -26,9 +26,10 @@ class TranscriptionClient {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    fun transcribe(audioName: String): JsonNode {
+    fun transcribe(audioName: String, controlNumber: Int): JsonNode {
         val jsonNode = jacksonObjectMapper().createObjectNode()
         jsonNode.put("audio", audioName)
+        jsonNode.put("controlNumber", controlNumber)
         val request = HttpRequest.newBuilder(URI("$WHISPER_URL/transcribe"))
             .POST(HttpRequest.BodyPublishers.ofString(jsonNode.toString()))
             .header("Content-Type", "application/json")

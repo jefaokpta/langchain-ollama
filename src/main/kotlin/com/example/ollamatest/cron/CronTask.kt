@@ -31,6 +31,7 @@ class CronTask(
     fun keepLLMAliveEvery5Minutes(){
         log.info("Perguntando a cada 5 minutos")
         log.info(llamaService.classifierDepartment(DepartmentQuestion(
+            900023,
             "Mantendo LLM ativa pra nao crashar",
             listOf(Department(1, "llm"), Department(2, "robo"))
         )).toString())

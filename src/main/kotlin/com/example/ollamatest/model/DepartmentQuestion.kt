@@ -5,6 +5,7 @@ package com.example.ollamatest.model
  * Date: 8/8/24
  */
 data class DepartmentQuestion(
+    val controlNumber: Int,
     val text: String? = null,
     val departments: List<Department>,
     val audio: String? = null

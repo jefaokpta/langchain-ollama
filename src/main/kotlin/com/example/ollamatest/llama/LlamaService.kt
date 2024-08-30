@@ -53,7 +53,10 @@ class LlamaService(private val transcriptionClient: TranscriptionClient) {
     }
 
     fun classifierDepartmentAudio(departmentQuestion: DepartmentQuestion): Answer {
-        return classifierDepartment(departmentQuestion.copy(text = transcriptionClient.transcribe(departmentQuestion.audio!!)["text"].asText()))
+        return classifierDepartment(departmentQuestion.copy(text = transcriptionClient.transcribe(
+            departmentQuestion.audio!!,
+            departmentQuestion.controlNumber
+        )["text"].asText()))
     }
 
     private fun seekRigthAnswer(fullAnswer: String, departmentQuestion: DepartmentQuestion): String {
