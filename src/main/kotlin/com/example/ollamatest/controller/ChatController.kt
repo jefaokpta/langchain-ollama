@@ -21,7 +21,7 @@ class ChatController(private val llamaService: LlamaService) {
         }
         if (departmentQuestion.departments.size == 1) {
             log.warn("\uD83D\uDEAB Existe apenas uma opção de departamento para classificar")
-            return Answer(departmentQuestion.departments.first().deptoId)
+            return Answer(departmentQuestion.departments.first().id)
         }
         if (departmentQuestion.audio != null) {
             return llamaService.classifierDepartmentAudio(departmentQuestion)
