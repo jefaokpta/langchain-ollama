@@ -64,7 +64,9 @@ class LlamaService(private val transcriptionClient: TranscriptionClient) {
             .sortedByDescending { it.rank }
         log.info("Options ranked: $optionsRanked")
         if (optionsRanked[0].rank != optionsRanked[1].rank) {
-            return optionsRanked[0].option
+            val winnerOption = optionsRanked[0].option
+            if (winnerOption.contains("subura")) return "0" //todo: ignorar subura temporarimente ate ajustar o app em produção
+            return winnerOption
         }
         return "0"
     }
