@@ -10,9 +10,8 @@ import dev.langchain4j.model.input.structured.StructuredPrompt
 class StructuredPrompt(prompt: String) {
 
     @StructuredPrompt(
-//        "Voçê é atendente de uma empresa de serviços online e deve adivinhar qual o departamento que melhor atenda a necessidade do cliente: {{text}}",
         "Voçê é atendente de uma empresa de serviços de telefonia",
-        "Descobra se a conversa é de uma que já é cliente ou ainda não é cliente: {{text}}",
+        "Descobra se a conversa se trata de uma pessoa que já é cliente ou ainda não é cliente: {{text}}",
         "Responda apenas o número correspondente da opção: {{options}}",
         "Caso não saiba o que responder, responda apenas o múmero: 0"
     )

@@ -43,7 +43,10 @@ class LlamaService(private val transcriptionClient: TranscriptionClient) {
     fun assistant() = assistant
 
     fun classifierDepartment(departmentQuestion: DepartmentQuestion): Answer {
-        val deptoTemplate = StructuredPrompt.DepartmentTemplate(departmentQuestion.text!!, departmentQuestion.departments.map { "${it.id}: ${it.name}" })
+        val deptoTemplate = StructuredPrompt.DepartmentTemplate(
+            departmentQuestion.text!!,
+            departmentQuestion.departments.mapIndexed { index, department -> "numero ${index + 1}: ${department.name}" }
+        )
         val prompt = StructuredPromptProcessor.toPrompt(deptoTemplate)
         return Answer(seekRigthAnswer(
             classifierModel().generate(prompt.text())
@@ -60,12 +63,12 @@ class LlamaService(private val transcriptionClient: TranscriptionClient) {
     }
 
     private fun seekRigthAnswer(fullAnswer: String, departmentQuestion: DepartmentQuestion): String {
-        val optionsRanked = departmentQuestion.departments.map { OptionRank(it.id, countOptions(fullAnswer, it.id)) }
-            .sortedByDescending { it.rank }
+        val optionsRanked = departmentQuestion.departments.mapIndexed { index, department ->
+            OptionRank((index + 1), department.id, countOptions(fullAnswer, (index + 1).toString()))
+        }.sortedByDescending { it.rank }
         log.info("Options ranked: $optionsRanked")
         if (optionsRanked[0].rank != optionsRanked[1].rank) {
             val winnerOption = optionsRanked[0].option
-            if (winnerOption.contains("subura")) return "0" //todo: ignorar subura temporarimente ate ajustar o app em produção
             return winnerOption
         }
         return "0"
