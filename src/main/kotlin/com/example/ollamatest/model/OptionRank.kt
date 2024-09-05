@@ -5,7 +5,7 @@ package com.example.ollamatest.model
  * Date: 8/23/24
  */
 data class OptionRank(
-    val option: Int,
+    val option: String,
     val rank: Int
 ) {
 }

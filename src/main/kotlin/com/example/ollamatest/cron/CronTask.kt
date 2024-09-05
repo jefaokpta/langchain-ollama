@@ -33,7 +33,7 @@ class CronTask(
         log.info(llamaService.classifierDepartment(DepartmentQuestion(
             900023,
             "Mantendo LLM ativa pra nao crashar",
-            listOf(Department(1, "llm"), Department(2, "robo"))
+            listOf(Department("1", "llm"), Department("2", "robo"))
         )).toString())
     }
 }

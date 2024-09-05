@@ -6,7 +6,7 @@ package com.example.ollamatest.model
  */
 
 class Department(
-    val id: Int,
+    val deptoId: String,
     val name: String,
 ) {
 }
