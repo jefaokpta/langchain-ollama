@@ -67,10 +67,7 @@ class LlamaService(private val transcriptionClient: TranscriptionClient) {
             OptionRank((index + 1), department.id, countOptions(fullAnswer, (index + 1).toString()))
         }.sortedByDescending { it.rank }
         log.info("Options ranked: $optionsRanked")
-        if (optionsRanked[0].rank != optionsRanked[1].rank) {
-            val winnerOption = optionsRanked[0].option
-            return winnerOption
-        }
+        if (optionsRanked[0].rank != optionsRanked[1].rank) return optionsRanked[0].option
         return "0"
     }
     private fun countOptions(text: String, option: String): Int {
